@@ -24,25 +24,36 @@
           var rawMarkup = converter.makeHtml(this.props.children.toString());
 
           return (
-            <div className="comment">
+            <div className="commentBox">
+             <div className="comment"><span dangerouslySetInnerHTML={{__html: rawMarkup}} /></div>
               <h2 className="commentAuthor">
                 {this.props.author}
               </h2>
-             <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
 
             </div>
           );
         }
       });
 
+      //okay so i changed the structure of the html a little here above simple stuff 
+
+      //usually you should give everything in react a wrapper div calling it [ElementName]Box
+
+      //or [ElementName]Container
+
 
       var CommentBox = React.createClass({
+        getDefaultProps: function() {
+          return {
+            data: []
+          }
+        },
         getInitialState: function() {
-          return {data: []};
+          return {data: this.props.data};
         },
         componentDidMount: function() {
           this.loadCommentsFromServer();
-          setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+          // setInterval(this.loadCommentsFromServer, this.props.pollInterval);
         },
         
         loadCommentsFromServer: function() {
@@ -50,6 +61,7 @@
             url: this.props.url,
             dataType: 'json',
             success: function(data) {
+              this.setProps({data: data});
               this.setState({data: data});
             }.bind(this),
             error: function(xhr, status, err) {
@@ -61,6 +73,7 @@
 
           var comments = this.state.data;
           var newComments = comments.concat([comment]);
+          this.setProps({data: newComments});
           this.setState({data: newComments});
 
 
@@ -77,15 +90,44 @@
             }.bind(this)
           });
         },
+        filterSearch: function(query) {
+          this.props.data.forEach(function(obj) {
+            obj.text = obj.text.replace(new RegExp('<b>', 'gi'), '');
+            obj.text = obj.text.replace(new RegExp('</b>', 'gi'), '');
+          });
+          var newData = this.props.data.filter(function(_data) {
+            return _data.text.toUpperCase().indexOf(query.toUpperCase()) !== -1;
+          });
+          newData.forEach(function(obj) {
+            if (query.length !== 0) {
+              obj.text = obj.text.replace(new RegExp(query, 'gi'), '<b>' + query + '</b>');
+            }
+          });
+          this.setState({
+            data: newData
+          });
+        },
         render: function() {
           return (
             <div className="commentBox">        
             <h1>Comments</h1>
+            <SearchBox filterSearch={this.filterSearch} />
             <CommentList data={this.state.data} />
             <CommentForm onCommentSubmit={this.handleCommentSubmit} />
-
             </div>
           );
+        }
+      });
+      
+      /*
+       *  okay cool let me show you how it work so far
+       */
+      var SearchBox = React.createClass({
+        handleKeyUp: function(e) {
+          this.props.filterSearch(this.refs.search.getDOMNode().value);
+        },
+        render: function() {
+          return <input className='search' placeholder='search' type='text' ref='search' onKeyUp={this.handleKeyUp}></input>
         }
       });
 
@@ -142,6 +184,23 @@
         <CommentBox url="comments.json" pollInterval={2000} />,
         document.getElementById('content')
       );
+
+//Look into 
     </script>
+    <style>
+      .commentBox {
+        width: 100%;
+      }
+      .commentBox .comment {
+        display: inline-block;
+      }
+      .commentBox .commentAuthor {
+        font-size: 12px;
+        display: inline-block;
+      }
+      h2 {
+        float: right;
+      }
+    </style>
   </body>
 </html>
