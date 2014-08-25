@@ -7,6 +7,8 @@
     <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
     <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet/less" type="text/css" href="styles.less" />
+    <script src="lib/less-1.7.4.min.js" type="text/javascript"></script>
 
   </head>
   <body>
@@ -20,6 +22,7 @@
 
       var converter = new Showdown.converter();
 
+
       var Comment = React.createClass({
         render: function() {
           var rawMarkup = converter.makeHtml(this.props.children.toString());
@@ -32,6 +35,22 @@
                 {this.props.author}
               </h2>
 
+            </div>
+          );
+        }
+      });
+      
+      var CommentLine = React.createClass({
+        render: function() {
+          return (
+            <div className="commentLineContainer">
+              <div className="checkXContainer">
+                <div className="check">/</div>
+                <div className="x">x</div>
+              </div>
+              <Comment author={this.props.author}>
+                {this.props.children}
+              </Comment>
             </div>
           );
         }
@@ -137,11 +156,11 @@
       // tutorial2.js
       var CommentList = React.createClass({
         render: function() {
-          var commentNodes = this.props.data.map(function (comment) {
+          var commentNodes = this.props.data.map(function (commentLine) {
             return (
-              <Comment author={comment.author}>
-                {comment.text}
-              </Comment>
+              <CommentLine author={commentLine.author}>
+                {commentLine.text}
+              </CommentLine>
             );
           });
 
@@ -203,13 +222,21 @@
           border-bottom: 1px solid #DDDDDD;
       }
 
-      .commentContainer .comment {
+      .checkXContainer {
+        float: left;
+        width:40px;
+      }
+
+      .checkXContainer > div{
+        float: left;
+        width:20px;
+      }
+
+      .commentContainer >*{
         
         display: table-cell;
       }
       .commentContainer .commentAuthor {
-
-        display: table-cell;
         font-size: 12px;
         width:100px;
       }
