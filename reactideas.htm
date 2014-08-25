@@ -97,13 +97,14 @@
             url: this.props.url,
             dataType: 'json',
             success: function(data) {
-              
+
              data=$.map(data,function(o) {
                 o.text= $('<div/>').text(o.text).html(); //#todo use underscore _.escape
                 o.author= $('<div/>').text(o.author).html(); //#todo use underscore _.escape
+
                 return o
               })
-             
+
              this.setProps({data: data});
              this.setState({data: data});
            }.bind(this),
@@ -183,12 +184,12 @@
         render: function() {
           var ideaNodes = this.props.data.map(function (idea) {
             return (
-              <Idea author={idea.author}>
+              <Idea id={idea.id} author={idea.author}>
                 {idea.text}
               </Idea>
               );
           });
-
+          ideaNodes=ideaNodes.reverse();
           return (
             <div className="ideaList">
              {ideaNodes}
@@ -218,7 +219,7 @@
           return (
             <div className="ideaForm">
               <form className="ideaForm" onSubmit={this.handleSubmit}>
-                
+
                 <input type="text" placeholder="Add an idea!" ref="text" />
                 <input type="text" placeholder="Your name" ref="author" />
                 <input type="submit" value="Post" />
@@ -239,9 +240,9 @@
 
   .ideaBoxContainer {
     width: 70%;
-    
+
   }
-  
+
   .ideaContainer  {
     display: table;
     width: 100%;
@@ -259,7 +260,7 @@
   }
 
   .ideaContainer >*{
-    
+
     display: table-cell;
   }
   .ideaContainer .ideaAuthor {
@@ -267,7 +268,7 @@
     width:100px;
   }
   h2 {
-    
+
   }
 </style>
 

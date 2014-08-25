@@ -129,8 +129,8 @@
 
 import json
 ideaslist=[]
-for idea in RAW_IDEAS:
-    ideaslist.append({"author":"","text":idea})
+for i,idea in enumerate(RAW_IDEAS):
+    ideaslist.append({"id":i,"author":"","text":idea})
 outputfilename="initideas.json"
 with open(outputfilename, 'wb') as outfile:
-    outfile.write(json.dumps(ideaslist, indent=4))
+    outfile.write(json.dumps(ideaslist, indent=4, sort_keys=True))
