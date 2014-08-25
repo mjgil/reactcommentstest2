@@ -1,21 +1,20 @@
 <!-- template.html -->
 <html>
-<head>
-  <title>Hello React</title>
-  <script src="http://fb.me/react-0.11.0.js"></script>
-  <script src="http://fb.me/JSXTransformer-0.11.0.js"></script>
-  <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet/less" type="text/css" href="styles.less" />
-  <script src="lib/less-1.7.4.min.js" type="text/javascript"></script>
+  <head>
+    <title>Hello React</title>
+    <script src="http://fb.me/react-0.11.0.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.11.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet/less" type="text/css" href="styles.less" />
+    <script src="less.js" type="text/javascript"></script>
 
-
-</head>
-<body>
-  <div id="content"></div>
-  <script type="text/jsx">
-    /** @jsx React.DOM */
+  </head>
+  <body>
+    <div id="content"></div>
+    <script type="text/jsx">
+      /** @jsx React.DOM */
       // The above declaration must remain intact at the top of the script.
       // Your code here
       // tutorial1.js
@@ -30,6 +29,10 @@
 
           return (
             <div className="commentContainer">
+              <div className="checkXContainer">
+                <div className="check">/</div>
+                <div className="x">x</div>
+              </div>
 
               <div className="comment"><span dangerouslySetInnerHTML={{__html: rawMarkup}} /></div>
               <h2 className="commentAuthor">
@@ -37,29 +40,10 @@
               </h2>
 
             </div>
-            );
+          );
         }
       });
-      
-      var CommentLine = React.createClass({
-        render: function() {
-          return (
-            <div className="commentLineContainer">
-              <div className="checkXContainer">
-                <div className="check">/</div>
-                <div className="x">x</div>
-              </div>
 
-              <div className="commentDispContainer">
-                <Comment author={this.props.author}>
-                  {this.props.children}
-                </Comment>
-              </div>
-
-            </div>
-            );
-        }
-      });
 
       //okay so i changed the structure of the html a little here above simple stuff 
 
@@ -137,19 +121,19 @@
         render: function() {
           return (
             <div className="commentBoxContainer">        
-              <h1>Comments</h1>
-              <SearchBox filterSearch={this.filterSearch} />
-              <CommentForm onCommentSubmit={this.handleCommentSubmit} />
-              <CommentList data={this.state.data} />
+            <h1>Comments</h1>
+            <SearchBox filterSearch={this.filterSearch} />
+            <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+            <CommentList data={this.state.data} />
             </div>
-            );
+          );
         }
       });
-
+      
       /*
        * 
        */
-       var SearchBox = React.createClass({
+      var SearchBox = React.createClass({
         handleKeyUp: function(e) {
           this.props.filterSearch(this.refs.search.getDOMNode().value);
         },
@@ -161,19 +145,19 @@
       // tutorial2.js
       var CommentList = React.createClass({
         render: function() {
-          var commentNodes = this.props.data.map(function (commentLine) {
+          var commentNodes = this.props.data.map(function (comment) {
             return (
-              <CommentLine author={commentLine.author}>
-                {commentLine.text}
-              </CommentLine>
-              );
+              <Comment author={comment.author}>
+                {comment.text}
+              </Comment>
+            );
           });
 
           return (
             <div className="commentList">
-             {commentNodes}
-           </div>
-           );
+               {commentNodes}
+            </div>
+          );
         }
       });
 
@@ -203,18 +187,52 @@
                 <input type="submit" value="Post" />
               </form>
             </div>
-            );
+          );
         }
       });
 
       React.renderComponent(
         <CommentBox url="comments.json" pollInterval={2000} />,
         document.getElementById('content')
-        );
+      );
 
 //Look into 
-</script>
+    </script>
+    <style>
 
+      .commentBoxContainer {
+        width: 70%;
+         
+      }
+      
+      .commentContainer  {
+          display: table;
+          width: 100%;
+          border-bottom: 1px solid #DDDDDD;
+      }
 
-</body>
+      .checkXContainer {
+        float: left;
+        width:40px;
+      }
+
+      .checkXContainer > div{
+        float: left;
+        width:20px;
+      }
+
+      .commentContainer >*{
+        
+        display: table-cell;
+      }
+      .commentContainer .commentAuthor {
+        font-size: 12px;
+        width:100px;
+      }
+      h2 {
+        
+      }
+    </style>
+
+  </body>
 </html>
