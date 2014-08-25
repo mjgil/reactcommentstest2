@@ -6,6 +6,7 @@
     <script src="http://fb.me/JSXTransformer-0.11.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
 
   </head>
   <body>
@@ -24,8 +25,9 @@
           var rawMarkup = converter.makeHtml(this.props.children.toString());
 
           return (
-            <div className="commentBox">
-             <div className="comment"><span dangerouslySetInnerHTML={{__html: rawMarkup}} /></div>
+            <div className="commentContainer">
+              
+              <div className="comment"><span dangerouslySetInnerHTML={{__html: rawMarkup}} /></div>
               <h2 className="commentAuthor">
                 {this.props.author}
               </h2>
@@ -90,6 +92,7 @@
             }.bind(this)
           });
         },
+
         filterSearch: function(query) {
           this.props.data.forEach(function(obj) {
             obj.text = obj.text.replace(new RegExp('<b>', 'gi'), '');
@@ -109,18 +112,18 @@
         },
         render: function() {
           return (
-            <div className="commentBox">        
+            <div className="commentBoxContainer">        
             <h1>Comments</h1>
             <SearchBox filterSearch={this.filterSearch} />
-            <CommentList data={this.state.data} />
             <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+            <CommentList data={this.state.data} />
             </div>
           );
         }
       });
       
       /*
-       *  okay cool let me show you how it work so far
+       * 
        */
       var SearchBox = React.createClass({
         handleKeyUp: function(e) {
@@ -188,19 +191,32 @@
 //Look into 
     </script>
     <style>
-      .commentBox {
-        width: 100%;
+
+      .commentBoxContainer {
+        width: 70%;
+         
       }
-      .commentBox .comment {
-        display: inline-block;
+      
+      .commentContainer  {
+          display: table;
+          width: 100%;
+          border-bottom: 1px solid #DDDDDD;
       }
-      .commentBox .commentAuthor {
+
+      .commentContainer .comment {
+        
+        display: table-cell;
+      }
+      .commentContainer .commentAuthor {
+
+        display: table-cell;
         font-size: 12px;
-        display: inline-block;
+        width:100px;
       }
       h2 {
-        float: right;
+        
       }
     </style>
+
   </body>
 </html>
