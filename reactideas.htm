@@ -1,20 +1,20 @@
 <!-- template.html -->
 <html>
-  <head>
-    <title>Hello React</title>
-    <script src="http://fb.me/react-0.11.0.js"></script>
-    <script src="http://fb.me/JSXTransformer-0.11.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet/less" type="text/css" href="styles.less" />
-    <script src="lib/less-1.7.4.min.js" type="text/javascript"></script>
+<head>
+  <title>Hello React</title>
+  <script src="http://fb.me/react-0.11.0.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.11.0.js"></script>
+  <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet/less" type="text/css" href="styles.less" />
+  <script src="lib/less-1.7.4.min.js" type="text/javascript"></script>
 
-  </head>
-  <body>
-    <div id="content"></div>
-    <script type="text/jsx">
-      /** @jsx React.DOM */
+</head>
+<body>
+  <div id="content"></div>
+  <script type="text/jsx">
+    /** @jsx React.DOM */
       // The above declaration must remain intact at the top of the script.
       // Your code here
       // tutorial1.js
@@ -49,6 +49,7 @@
 
         render: function() {
           var rawMarkup = this.props.children.toString();
+
           // var rawMarkup = converter.makeHtml(this.props.children.toString());
 
           //#todo #hack #warning dangerouslySetInnerHTML  xss possible  
@@ -65,7 +66,7 @@
               </h2>
 
             </div>
-          );
+            );
         }
       });
 
@@ -96,13 +97,20 @@
             url: this.props.url,
             dataType: 'json',
             success: function(data) {
-              this.setProps({data: data});
-              this.setState({data: data});
-            }.bind(this),
-            error: function(xhr, status, err) {
-              console.error(this.props.url, status, err.toString());
-            }.bind(this)
-          });
+              
+             data=$.map(data,function(o) {
+                o.text= $('<div/>').text(o.text).html(); //#todo use underscore _.escape
+                o.author= $('<div/>').text(o.author).html(); //#todo use underscore _.escape
+                return o
+              })
+             
+             this.setProps({data: data});
+             this.setState({data: data});
+           }.bind(this),
+           error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
         },
         handleIdeaSubmit: function(idea) {
 
@@ -146,20 +154,20 @@
         render: function() {
           return (
             <div className="ideaBoxContainer">        
-            <h1>Ideas</h1>
-            <SearchBox filterSearch={this.filterSearch} />
-            <IdeaForm onIdeaSubmit={this.handleIdeaSubmit} />
+              <h1>Ideas</h1>
+              <SearchBox filterSearch={this.filterSearch} />
+              <IdeaForm onIdeaSubmit={this.handleIdeaSubmit} />
 
-            <IdeaList data={this.state.data} />
+              <IdeaList data={this.state.data} />
             </div>
-          );
+            );
         }
       });
-      
+
       /*
        * 
        */
-      var SearchBox = React.createClass({
+       var SearchBox = React.createClass({
         handleKeyUp: function(e) {
           this.props.filterSearch(this.refs.search.getDOMNode().value);
         },
@@ -178,14 +186,14 @@
               <Idea author={idea.author}>
                 {idea.text}
               </Idea>
-            );
+              );
           });
 
           return (
             <div className="ideaList">
-               {ideaNodes}
-            </div>
-          );
+             {ideaNodes}
+           </div>
+           );
         }
       });
 
@@ -216,52 +224,52 @@
                 <input type="submit" value="Post" />
               </form>
             </div>
-          );
+            );
         }
       });
 
       React.renderComponent(
         <IdeaBox url="ideas.json" pollInterval={2000} />,
         document.getElementById('content')
-      );
+        );
 
 //Look into 
-    </script>
-    <style>
+</script>
+<style>
 
-      .ideaBoxContainer {
-        width: 70%;
-         
-      }
-      
-      .ideaContainer  {
-          display: table;
-          width: 100%;
-          border-bottom: 1px solid #DDDDDD;
-      }
+  .ideaBoxContainer {
+    width: 70%;
+    
+  }
+  
+  .ideaContainer  {
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid #DDDDDD;
+  }
 
-      .checkXContainer {
-        float: left;
-        width:40px;
-      }
+  .checkXContainer {
+    float: left;
+    width:40px;
+  }
 
-      .checkXContainer > div{
-        float: left;
-        width:20px;
-      }
+  .checkXContainer > div{
+    float: left;
+    width:20px;
+  }
 
-      .ideaContainer >*{
-        
-        display: table-cell;
-      }
-      .ideaContainer .ideaAuthor {
-        font-size: 12px;
-        width:100px;
-      }
-      h2 {
-        
-      }
-    </style>
+  .ideaContainer >*{
+    
+    display: table-cell;
+  }
+  .ideaContainer .ideaAuthor {
+    font-size: 12px;
+    width:100px;
+  }
+  h2 {
+    
+  }
+</style>
 
-  </body>
+</body>
 </html>
