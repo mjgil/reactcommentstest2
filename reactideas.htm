@@ -8,7 +8,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet/less" type="text/css" href="styles.less" />
-    <script src="less.js" type="text/javascript"></script>
+    <script src="lib/less-1.7.4.min.js" type="text/javascript"></script>
 
   </head>
   <body>
@@ -24,14 +24,39 @@
 
 
       var Idea = React.createClass({
-        render: function() {
-          var rawMarkup = converter.makeHtml(this.props.children.toString());
 
+        onCheck: function() {
+          //TODO
+
+          var text = this.props.children.toString()
+          
+          // TODO: send request to the server
+          
+          return false;
+        },
+        onX: function() {
+          //TODO
+          
+          var text = this.props.children.toString()
+          
+          // TODO: send request to the server
+          
+          return false;
+        },
+
+
+
+
+        render: function() {
+          var rawMarkup = this.props.children.toString();
+          // var rawMarkup = converter.makeHtml(this.props.children.toString());
+
+          //#todo #hack #warning dangerouslySetInnerHTML  xss possible  
           return (
             <div className="ideaContainer">
               <div className="checkXContainer">
-                <div className="check">/</div>
-                <div className="x">x</div>
+                <a href="" onClick={this.onCheck} className="check">/</a>
+                <a href="" onClick={this.onX} className="x">x</a>
               </div>
 
               <div className="idea"><span dangerouslySetInnerHTML={{__html: rawMarkup}} /></div>
@@ -138,6 +163,8 @@
         handleKeyUp: function(e) {
           this.props.filterSearch(this.refs.search.getDOMNode().value);
         },
+
+
         render: function() {
           return <input className='search' placeholder='search' type='text' ref='search' onKeyUp={this.handleKeyUp}></input>
         }
