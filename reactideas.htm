@@ -60,6 +60,9 @@
                 <a href="" onClick={this.onX} className="x">x</a>
               </div>
 
+              <div className="id">
+                <a href={"#/id/"+this.props.id}>{this.props.id}</a>
+              </div>
               <div className="idea"><span dangerouslySetInnerHTML={{__html: rawMarkup}} /></div>
               <h2 className="ideaAuthor">
                 {this.props.author}
@@ -91,7 +94,6 @@
           this.loadIdeasFromServer();
           // setInterval(this.loadIdeasFromServer, this.props.pollInterval);
         },
-        
         loadIdeasFromServer: function() {
           $.ajax({
             url: this.props.url,
@@ -238,41 +240,6 @@
 
 //Look into 
 </script>
-<style>
-
-  .ideaBoxContainer {
-    width: 70%;
-
-  }
-
-  .ideaContainer  {
-    display: table;
-    width: 100%;
-    border-bottom: 1px solid #DDDDDD;
-  }
-
-  .checkXContainer {
-    float: left;
-    width:40px;
-  }
-
-  .checkXContainer > div{
-    float: left;
-    width:20px;
-  }
-
-  .ideaContainer >*{
-
-    display: table-cell;
-  }
-  .ideaContainer .ideaAuthor {
-    font-size: 12px;
-    width:100px;
-  }
-  h2 {
-
-  }
-</style>
 
 </body>
 </html>
