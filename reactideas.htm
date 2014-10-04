@@ -147,7 +147,7 @@
           });
           newData.forEach(function(obj) {
             if (query.length !== 0) {
-              obj.text = obj.text.replace(new RegExp(query, 'gi'), '<b>' + query + '</b>');
+              obj.text = obj.text.replace(new RegExp("(" + query + ")", 'gi'), '<b>$1</b>');
             }
           });
           this.setState({
